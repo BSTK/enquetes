@@ -17,7 +17,4 @@ class AutenticacaoParams {
     @required this.email,
     @required this.senha
   });
-
-  Map toJson() => { 'email': email, 'password': senha };
-
 }

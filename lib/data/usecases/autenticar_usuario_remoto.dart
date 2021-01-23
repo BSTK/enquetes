@@ -15,7 +15,25 @@ class AutenticarUsuarioRemoto {
     this.httpClient.request(
         url: this.url,
         method: 'POST',
-        body: params.toJson()
+        body: AutenticarUsuarioRemotoParams
+                .from(params)
+                .toJson()
     );
   }
+}
+
+class AutenticarUsuarioRemotoParams {
+  final String email;
+  final String senha;
+
+  const AutenticarUsuarioRemotoParams({
+    @required this.email,
+    @required this.senha
+  });
+
+  factory AutenticarUsuarioRemotoParams.from(AutenticacaoParams params) =>
+      AutenticarUsuarioRemotoParams(email: params.email, senha: params.senha);
+
+  Map toJson() => { 'email': email, 'password': senha };
+
 }
