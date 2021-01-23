@@ -14,11 +14,10 @@ class AutenticarUsuarioRemoto {
   });
 
   Future<void> autenticar(final AutenticacaoParams params) async {
-    final body = { 'email': params.email, 'password': params.senha };
     this.httpClient.request(
         url: this.url,
         method: 'POST',
-        body: body
+        body: params.toJson()
     );
   }
 }
