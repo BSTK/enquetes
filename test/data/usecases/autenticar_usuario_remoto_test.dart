@@ -1,3 +1,4 @@
+import 'package:enquetes/domain/usecases/autenticacao.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,10 +13,12 @@ class AutenticarUsuarioRemoto {
     @required this.httpClient,
   });
 
-  Future<void> autenticar() async {
+  Future<void> autenticar(final AutenticacaoParams params) async {
+    final body = { 'email': params.email, 'password': params.senha };
     this.httpClient.request(
         url: this.url,
-        metodo: 'POST'
+        method: 'POST',
+        body: body
     );
   }
 }
@@ -23,7 +26,8 @@ class AutenticarUsuarioRemoto {
 abstract class HttpClient {
   Future<void> request({
     @required final String url,
-    @required final String metodo
+    @required final String method,
+    Map body,
   });
 }
 
@@ -40,12 +44,17 @@ void main() {
 
   test('Test - Deve chamar o HttpClient com parâmetros corretos', () async {
     final sut = AutenticarUsuarioRemoto(httpClient: httpClient, url: url);
+    final params = AutenticacaoParams(
+        email: faker.internet.email(),
+        senha: faker.internet.password(length: 10)
+    );
 
-    sut.autenticar();
+    sut.autenticar(params);
 
     verify(httpClient.request(
       url: url,
-      metodo: 'POST'
+      method: 'POST',
+      body: { 'email': params.email, 'password': params.senha }
     ));
   });
 
