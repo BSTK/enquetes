@@ -16,6 +16,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test:
+  mockito:
+  faker:
+  image_test_utils:
 
 # The following section is specific to Flutter.
 flutter:
