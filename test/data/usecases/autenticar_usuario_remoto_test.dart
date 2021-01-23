@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 class AutenticarUsuarioRemoto {
   final String url;
@@ -30,10 +30,15 @@ abstract class HttpClient {
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
+  String url;
+  HttpClientSpy httpClient;
+
+  setUp(() {
+    httpClient = HttpClientSpy();
+    url = faker.internet.httpUrl();
+  });
 
   test('Test - Deve chamar o HttpClient com parâmetros corretos', () async {
-    final httpClient = HttpClientSpy();
-    final url = faker.internet.httpUrl();
     final sut = AutenticarUsuarioRemoto(httpClient: httpClient, url: url);
 
     sut.autenticar();
