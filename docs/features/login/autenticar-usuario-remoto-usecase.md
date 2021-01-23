@@ -1,8 +1,8 @@
 # Autenticar usuário remoto - Use Case
 
 > ## Caso de Sucesso - Login e Senha corretos
-1. Sistema deve validar os dados informados no login
-2. Sistema deve fazer uma requisição para a URL da API de login (/login)
+1. ✅ Sistema deve validar os dados informados no login
+2. ✅ Sistema deve fazer uma requisição para a URL da API de login (/login)
 3. Sistema deve validar os dados recebidos da API
 4. Sistema deve entregar os dados da conta do usuário
 

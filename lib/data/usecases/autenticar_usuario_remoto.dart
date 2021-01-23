@@ -2,6 +2,8 @@ import 'package:enquetes/data/http/http.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:flutter/foundation.dart';
 
+const String METODO_POST = 'POST';
+
 class AutenticarUsuarioRemoto {
   final String url;
   final HttpClient httpClient;
@@ -14,7 +16,7 @@ class AutenticarUsuarioRemoto {
   Future<void> autenticar(final AutenticacaoParams params) async {
     this.httpClient.request(
         url: this.url,
-        method: 'POST',
+        method: METODO_POST,
         body: AutenticarUsuarioRemotoParams
                 .from(params)
                 .toJson()
