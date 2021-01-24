@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,21 +20,36 @@ class HttpAdapter {
     @required final String method,
     Map body
   }) async {
-    this.client.post(url);
+    final headers = {
+      HttpHeaders.contentTypeHeader : 'application/json',
+      HttpHeaders.acceptHeader: 'application/json'
+    };
+    this.client.post(url, headers: headers);
   }
 }
 
 void main () {
+  String url;
+  HttpAdapter sut;
+  ClientSpy client;
+
+  setUp(() {
+    client = ClientSpy();
+    url = faker.internet.httpUrl();
+    sut = HttpAdapter(client: client);
+  });
+
   group('HttpMethod - POST', () {
 
     test('Test - Deve fazer uma chamada POST com os dados corretos', () {
-      final client = ClientSpy();
-      final url = faker.internet.httpUrl();
-      final sut = HttpAdapter(client: client);
-
       sut.request(url: url, method: 'POST');
 
-      verify(client.post(url));
+      verify(client.post(
+          url,
+          headers: {
+            HttpHeaders.contentTypeHeader : 'application/json',
+            HttpHeaders.acceptHeader: 'application/json'
+      }));
     });
 
   });
