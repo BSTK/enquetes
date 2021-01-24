@@ -92,6 +92,20 @@ void main() {
     expect(future, throwsA(DomainError.invalidCredentials));
   });
 
+  test('Test - Deve lançar erro quando HttpClient retornar código 200 mas com dados inválidos', () async {
+    when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')
+    )).thenAnswer((_) async => {
+      'invalid_key': 'invalid_value'
+    });
+
+    final future = sut.autenticar(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
   test('Test - Deve retornar uma conta autenticada quando HttpClient retornar código 200', () async {
     final name = faker.person.name();
     final acessToken = faker.guid.guid();
