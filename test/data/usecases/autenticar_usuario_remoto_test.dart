@@ -11,19 +11,21 @@ class HttpClientSpy extends Mock implements HttpClient { }
 void main() {
   String url;
   HttpClientSpy httpClient;
+  AutenticacaoParams params;
+  AutenticarUsuarioRemoto sut;
 
   setUp(() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
-  });
 
-  test('Test - Deve chamar o HttpClient com parâmetros corretos', () async {
-    final sut = AutenticarUsuarioRemoto(httpClient: httpClient, url: url);
-    final params = AutenticacaoParams(
+    sut = AutenticarUsuarioRemoto(httpClient: httpClient, url: url);
+    params = AutenticacaoParams(
         email: faker.internet.email(),
         senha: faker.internet.password(length: 10)
     );
+  });
 
+  test('Test - Deve chamar o HttpClient com parâmetros corretos', () async {
     sut.autenticar(params);
 
     verify(httpClient.request(
@@ -35,16 +37,10 @@ void main() {
 
   test('Test - Deve lançar erro quando HttpClient retornar código 400', () async {
     when(httpClient.request(
-      url: anyNamed('url'),
-      method: anyNamed('method'),
-      body: anyNamed('body')
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')
     )).thenThrow(HttpError.badRequest);
-
-    final sut = AutenticarUsuarioRemoto(httpClient: httpClient, url: url);
-    final params = AutenticacaoParams(
-        email: faker.internet.email(),
-        senha: faker.internet.password(length: 10)
-    );
 
     final future = sut.autenticar(params);
 
