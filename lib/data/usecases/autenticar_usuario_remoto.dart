@@ -1,4 +1,5 @@
 import 'package:enquetes/data/http/http.dart';
+import 'package:enquetes/domain/helper/helper.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,13 +15,12 @@ class AutenticarUsuarioRemoto {
   });
 
   Future<void> autenticar(final AutenticacaoParams params) async {
-    this.httpClient.request(
-        url: this.url,
-        method: METODO_POST,
-        body: AutenticarUsuarioRemotoParams
-                .from(params)
-                .toJson()
-    );
+    try {
+      final body = AutenticarUsuarioRemotoParams.from(params).toJson();
+      this.httpClient.request(url: this.url, method: METODO_POST, body: body);
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
