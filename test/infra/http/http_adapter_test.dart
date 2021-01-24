@@ -30,9 +30,12 @@ class HttpAdapter implements HttpClient {
 
     final bodyJson = body != null ? jsonEncode(body) : null;
     final response = await this.client.post(url, headers: headers, body: bodyJson);
-
-    return response.body.isNotEmpty
+    final responseJsonDecode = response.body.isNotEmpty
         ? jsonDecode(response.body)
+        : null;
+
+    return HttpStatus.ok == response.statusCode
+      ? responseJsonDecode
         : null;
   }
 }
@@ -87,7 +90,6 @@ void main () {
 
     test('Test - Deve fazer uma chamada POST com dados de retorno', () async {
       final response = await sut.request(url: url, method: 'POST');
-
       expect(response, {'key': 'value'});
     });
 
@@ -95,7 +97,6 @@ void main () {
       mockWhen(responseBody: '');
 
       final response = await sut.request(url: url, method: 'POST');
-
       expect(response, null);
     });
 
@@ -103,7 +104,13 @@ void main () {
       mockWhen(statusCode: 204, responseBody: '');
 
       final response = await sut.request(url: url, method: 'POST');
+      expect(response, null);
+    });
 
+    test('Test - Deve fazer uma chamada POST com dados de retorno e HttpSatus 204', () async {
+      mockWhen(statusCode: 204);
+
+      final response = await sut.request(url: url, method: 'POST');
       expect(response, null);
     });
 
