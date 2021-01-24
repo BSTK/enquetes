@@ -97,6 +97,13 @@ void main () {
       expect(future, throwsA(HttpError.badRequest));
     });
 
+    test('Test - Deve fazer uma chamada POST retorno HttpSatus 500', () async {
+      mockWhen(statusCode: 500, responseBody: '');
+
+      final future = sut.request(url: url, method: 'POST');
+      expect(future, throwsA(HttpError.serverError));
+    });
+
   });
 
 }
