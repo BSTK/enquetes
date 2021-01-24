@@ -42,14 +42,6 @@ void main () {
   HttpAdapter sut;
   ClientSpy client;
 
-  void mockWhen(final String responseBody) {
-    when(client.post(
-        any,
-        body: anyNamed('body'),
-        headers: anyNamed('headers')
-    )).thenAnswer((_) async => Response(responseBody, 200));
-  }
-
   setUp(() {
     client = ClientSpy();
     url = faker.internet.httpUrl();
@@ -58,9 +50,17 @@ void main () {
 
   group('HttpMethod - POST', () {
 
-    test('Test - Deve fazer uma chamada POST com os dados corretos', () {
-      mockWhen('{"key":"value"}');
+    void mockWhen({final String responseBody = '{"key":"value"}'}) {
+      when(client.post(
+          any,
+          body: anyNamed('body'),
+          headers: anyNamed('headers')
+      )).thenAnswer((_) async => Response(responseBody, 200));
+    }
 
+    setUp(() => mockWhen());
+
+    test('Test - Deve fazer uma chamada POST com os dados corretos', () {
       sut.request(url: url, method: 'POST', body: {'key': 'value'});
 
       verify(client.post(
@@ -74,8 +74,6 @@ void main () {
     });
 
     test('Test - Deve fazer uma chamada POST sem dados no body', () {
-      mockWhen('{"key":"value"}');
-
       sut.request(url: url, method: 'POST');
 
       verify(client.post(
@@ -85,15 +83,13 @@ void main () {
     });
 
     test('Test - Deve fazer uma chamada POST com dados de retorno', () async {
-      mockWhen('{"key":"value"}');
-
       final response = await sut.request(url: url, method: 'POST');
 
       expect(response, {'key': 'value'});
     });
 
     test('Test - Deve fazer uma chamada POST sem dados de retorno e HttpSatus 200', () async {
-      mockWhen('');
+      mockWhen(responseBody: '');
 
       final response = await sut.request(url: url, method: 'POST');
 
@@ -102,5 +98,7 @@ void main () {
 
   });
 
-  group('HttpMethod - GET', () { });
+  group('HttpMethod - GET', () {
+
+  });
 }
