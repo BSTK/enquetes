@@ -1,4 +1,5 @@
 import 'package:enquetes/data/http/http.dart';
+import 'package:enquetes/data/model/conta_autenticacada_model.dart';
 import 'package:enquetes/domain/entidades/conta_autenticacada.dart';
 import 'package:enquetes/domain/helper/helper.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
@@ -24,7 +25,10 @@ class AutenticarUsuarioRemoto {
           body: body
       );
 
-      return ContaAutenticacada.fromJson(httpResponse);
+      return ContaAutenticacadaModel
+          .fromJson(httpResponse)
+          .toEntity();
+
     } on HttpError catch(error) {
       throw error == HttpError.unauthorized
         ? DomainError.invalidCredentials
