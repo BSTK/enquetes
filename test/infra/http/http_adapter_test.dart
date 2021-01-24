@@ -42,6 +42,14 @@ void main () {
   HttpAdapter sut;
   ClientSpy client;
 
+  void mockWhen(final String responseBody) {
+    when(client.post(
+        any,
+        body: anyNamed('body'),
+        headers: anyNamed('headers')
+    )).thenAnswer((_) async => Response(responseBody, 200));
+  }
+
   setUp(() {
     client = ClientSpy();
     url = faker.internet.httpUrl();
@@ -51,11 +59,7 @@ void main () {
   group('HttpMethod - POST', () {
 
     test('Test - Deve fazer uma chamada POST com os dados corretos', () {
-      when(client.post(
-          any,
-          body: anyNamed('body'),
-          headers: anyNamed('headers')
-      )).thenAnswer((_) async => Response('{"key":"value"}', 200));
+      mockWhen('{"key":"value"}');
 
       sut.request(url: url, method: 'POST', body: {'key': 'value'});
 
@@ -70,8 +74,7 @@ void main () {
     });
 
     test('Test - Deve fazer uma chamada POST sem dados no body', () {
-      when(client.post(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => Response('{"key":"value"}', 200));
+      mockWhen('{"key":"value"}');
 
       sut.request(url: url, method: 'POST');
 
@@ -82,8 +85,7 @@ void main () {
     });
 
     test('Test - Deve fazer uma chamada POST com dados de retorno', () async {
-      when(client.post(any, headers: anyNamed('headers')))
-        .thenAnswer((_) async => Response('{"key":"value"}', 200));
+      mockWhen('{"key":"value"}');
 
       final response = await sut.request(url: url, method: 'POST');
 
@@ -91,8 +93,7 @@ void main () {
     });
 
     test('Test - Deve fazer uma chamada POST sem dados de retorno e HttpSatus 200', () async {
-      when(client.post(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => Response('', 200));
+      mockWhen('');
 
       final response = await sut.request(url: url, method: 'POST');
 
