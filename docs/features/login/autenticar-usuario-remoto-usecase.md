@@ -13,7 +13,7 @@
 1. ✅ Sistema deve apresentar uma mensagem de dados inválidos
 
 > ## Caso de Exceção - Resposta inválida
-1. Sistema deve apresentar uma mensagem de erro inesperado
+1. ✅ Sistema deve apresentar uma mensagem de erro inesperado
 
 > ## Caso de Exceção - Falha no servidor
 1. ✅ Sistema deve apresentar uma mensagem de erro inesperado
