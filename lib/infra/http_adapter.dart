@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:enquetes/data/http/http.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 class HttpAdapter implements HttpClient {
@@ -25,6 +25,10 @@ class HttpAdapter implements HttpClient {
 
     final bodyJson = body != null ? jsonEncode(body) : null;
     final response = await this.client.post(url, headers: headers, body: bodyJson);
+    return _handleresponse(response);
+  }
+
+  Map _handleresponse(final Response response) {
     final responseJsonDecode = response.body.isNotEmpty
         ? jsonDecode(response.body)
         : null;
