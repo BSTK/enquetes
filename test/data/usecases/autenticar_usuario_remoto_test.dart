@@ -14,6 +14,22 @@ void main() {
   AutenticacaoParams params;
   AutenticarUsuarioRemoto sut;
 
+  void mockWhenSucesso(final Map mock) {
+    when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')
+    )).thenAnswer((_) async => mock);
+  }
+
+  void mockWhenErro(final HttpError error) {
+    when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')
+    )).thenThrow(error);
+  }
+
   setUp(() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
@@ -26,14 +42,7 @@ void main() {
   });
 
   test('Test - Deve chamar o HttpClient com parâmetros corretos', () async {
-    when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-        body: anyNamed('body')
-    )).thenAnswer((_) async => {
-      'acessToken': faker.person.name(),
-      'name': faker.guid.guid()
-    });
+    mockWhenSucesso({ 'acessToken': faker.person.name(), 'name': faker.guid.guid()});
 
     sut.autenticar(params);
 
@@ -45,64 +54,37 @@ void main() {
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 400', () async {
-    when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-        body: anyNamed('body')
-    )).thenThrow(HttpError.badRequest);
+    mockWhenErro(HttpError.badRequest);
 
     final future = sut.autenticar(params);
-
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 404', () async {
-    when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-        body: anyNamed('body')
-    )).thenThrow(HttpError.notFound);
+    mockWhenErro(HttpError.notFound);
 
     final future = sut.autenticar(params);
-
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 500', () async {
-    when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-        body: anyNamed('body')
-    )).thenThrow(HttpError.serverError);
+    mockWhenErro(HttpError.serverError);
 
     final future = sut.autenticar(params);
-
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 401', () async {
-    when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-        body: anyNamed('body')
-    )).thenThrow(HttpError.unauthorized);
+    mockWhenErro(HttpError.unauthorized);
 
     final future = sut.autenticar(params);
-
     expect(future, throwsA(DomainError.invalidCredentials));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 200 mas com dados inválidos', () async {
-    when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-        body: anyNamed('body')
-    )).thenAnswer((_) async => {
-      'invalid_key': 'invalid_value'
-    });
+    mockWhenSucesso({'invalid_key': 'invalid_value'});
 
     final future = sut.autenticar(params);
-
     expect(future, throwsA(DomainError.unexpected));
   });
 
@@ -110,17 +92,9 @@ void main() {
     final name = faker.person.name();
     final acessToken = faker.guid.guid();
 
-    when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-        body: anyNamed('body')
-    )).thenAnswer((_) async => {
-      'acessToken': acessToken,
-      'name': name
-    });
+    mockWhenSucesso({ 'acessToken': acessToken, 'name': name});
 
     final contaAutenticada = await sut.autenticar(params);
-
     expect(contaAutenticada.token, equals(acessToken));
   });
 
