@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:faker/faker.dart';
@@ -24,7 +25,7 @@ class HttpAdapter {
       HttpHeaders.contentTypeHeader : 'application/json',
       HttpHeaders.acceptHeader: 'application/json'
     };
-    this.client.post(url, headers: headers);
+    this.client.post(url, headers: headers, body: jsonEncode(body));
   }
 }
 
@@ -42,14 +43,16 @@ void main () {
   group('HttpMethod - POST', () {
 
     test('Test - Deve fazer uma chamada POST com os dados corretos', () {
-      sut.request(url: url, method: 'POST');
+      sut.request(url: url, method: 'POST', body: {'key': 'value'});
 
       verify(client.post(
-          url,
-          headers: {
+        url,
+        headers: {
             HttpHeaders.contentTypeHeader : 'application/json',
             HttpHeaders.acceptHeader: 'application/json'
-      }));
+        },
+        body: '{"key":"value"}'
+      ));
     });
 
   });
