@@ -20,6 +20,17 @@ void main () {
     sut = HttpAdapter(client: client);
   });
 
+  group('Testes comuns', () {
+
+    test(
+        'Test - Deve fazer uma chamada POST com retorno '
+        'HttpError.serverError HttpSatus 500 para um metodo inválido', () async {
+      final future = sut.request(url: url, method: 'MEETODO_INVALIDO');
+      expect(future, throwsA(HttpError.serverError));
+    });
+
+  });
+
   group('HttpMethod - POST', () {
 
     void mockWhen({
@@ -83,21 +94,35 @@ void main () {
       expect(response, null);
     });
 
-    test('Test - Deve fazer uma chamada POST retorno HttpSatus 400', () async {
+    test('Test - Deve fazer uma chamada POST retorno HttpError.badRequest HttpSatus 400', () async {
       mockWhen(statusCode: 400);
 
       final future = sut.request(url: url, method: 'POST');
       expect(future, throwsA(HttpError.badRequest));
     });
 
-    test('Test - Deve fazer uma chamada POST retorno HttpSatus 400', () async {
-      mockWhen(statusCode: 400, responseBody: '');
+    test('Test - Deve fazer uma chamada POST retorno HttpError.unauthorized HttpSatus 401', () async {
+      mockWhen(statusCode: 401, responseBody: '');
 
       final future = sut.request(url: url, method: 'POST');
-      expect(future, throwsA(HttpError.badRequest));
+      expect(future, throwsA(HttpError.unauthorized));
     });
 
-    test('Test - Deve fazer uma chamada POST retorno HttpSatus 500', () async {
+    test('Test - Deve fazer uma chamada POST retorno HttpError.forbidden HttpSatus 403', () async {
+      mockWhen(statusCode: 403, responseBody: '');
+
+      final future = sut.request(url: url, method: 'POST');
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
+    test('Test - Deve fazer uma chamada POST retorno HttpError.notFound HttpSatus 404', () async {
+      mockWhen(statusCode: 404, responseBody: '');
+
+      final future = sut.request(url: url, method: 'POST');
+      expect(future, throwsA(HttpError.notFound));
+    });
+
+    test('Test - Deve fazer uma chamada POST retorno HttpError.serverError HttpSatus 500', () async {
       mockWhen(statusCode: 500, responseBody: '');
 
       final future = sut.request(url: url, method: 'POST');

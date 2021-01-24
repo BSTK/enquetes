@@ -18,6 +18,11 @@ class HttpAdapter implements HttpClient {
     @required final String method,
     Map body
   }) async {
+
+    if (!HTTP_METHODS.contains(method.toUpperCase())) {
+      throw HttpError.serverError;
+    }
+
     final headers = {
       HttpHeaders.acceptHeader: 'application/json',
       HttpHeaders.contentTypeHeader : 'application/json'
@@ -34,15 +39,14 @@ class HttpAdapter implements HttpClient {
         : null;
 
     if (HttpStatus.ok == response.statusCode) {
-      return HttpStatus.ok == response.statusCode
-          ? responseJsonDecode
-          : null;
+      return responseJsonDecode;
     }
 
-    if (HttpStatus.badRequest == response.statusCode) {
-      throw HttpError.badRequest;
-    } else {
-      throw HttpError.serverError;
+    if (HttpStatus.noContent == response.statusCode) {
+      return null;
     }
+
+    throw httpErrorsMapStatusCode[response.statusCode];
   }
+
 }

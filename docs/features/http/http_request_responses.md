@@ -12,10 +12,10 @@
 2. Unauthorized - HttpStatus 401
 3. Forbidden - HttpStatus 403
 4. Not Found - HttpStatus 404
-5. Internal Server Error - HttpStatus 500
+5. ✅ Internal Server Error - HttpStatus 500
 
 > ## Execeção - Com HttpStatus diferente dos citados acima
-1. Internal Server Error - HttpStatus 500
+1. ✅ Internal Server Error - HttpStatus 500
 
 > ## Execeção - Http request que deu alguma exceção não tratada
 1. Internal Server Error - HttpStatus 500
