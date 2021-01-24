@@ -1,3 +1,36 @@
-class HttpAdapter {
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:enquetes/data/http/http.dart';
+import 'package:http/http.dart';
+
+class HttpAdapter implements HttpClient {
+  final Client client;
+
+  HttpAdapter({
+    @required this.client
+  });
+
+  @override
+  Future<Map> request({
+    @required final String url,
+    @required final String method,
+    Map body
+  }) async {
+    final headers = {
+      HttpHeaders.acceptHeader: 'application/json',
+      HttpHeaders.contentTypeHeader : 'application/json'
+    };
+
+    final bodyJson = body != null ? jsonEncode(body) : null;
+    final response = await this.client.post(url, headers: headers, body: bodyJson);
+    final responseJsonDecode = response.body.isNotEmpty
+        ? jsonDecode(response.body)
+        : null;
+
+    return HttpStatus.ok == response.statusCode
+        ? responseJsonDecode
+        : null;
+  }
 }
