@@ -50,12 +50,15 @@ void main () {
 
   group('HttpMethod - POST', () {
 
-    void mockWhen({final String responseBody = '{"key":"value"}'}) {
+    void mockWhen({
+      final int statusCode = 200,
+      final String responseBody = '{"key":"value"}'}) {
+
       when(client.post(
           any,
           body: anyNamed('body'),
           headers: anyNamed('headers')
-      )).thenAnswer((_) async => Response(responseBody, 200));
+      )).thenAnswer((_) async => Response(responseBody, statusCode));
     }
 
     setUp(() => mockWhen());
@@ -90,6 +93,14 @@ void main () {
 
     test('Test - Deve fazer uma chamada POST sem dados de retorno e HttpSatus 200', () async {
       mockWhen(responseBody: '');
+
+      final response = await sut.request(url: url, method: 'POST');
+
+      expect(response, null);
+    });
+
+    test('Test - Deve fazer uma chamada POST sem dados de retorno e HttpSatus 204', () async {
+      mockWhen(statusCode: 204, responseBody: '');
 
       final response = await sut.request(url: url, method: 'POST');
 
