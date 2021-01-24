@@ -18,8 +18,10 @@ class AutenticarUsuarioRemoto {
     try {
       final body = AutenticarUsuarioRemotoParams.from(params).toJson();
       this.httpClient.request(url: this.url, method: METODO_POST, body: body);
-    } on HttpError {
-      throw DomainError.unexpected;
+    } on HttpError catch(error) {
+      throw error == HttpError.unauthorized
+        ? DomainError.invalidCredentials
+        : DomainError.unexpected;
     }
   }
 }
