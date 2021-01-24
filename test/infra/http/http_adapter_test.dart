@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:enquetes/data/http/http.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,14 +10,15 @@ import 'package:mockito/mockito.dart';
 
 class ClientSpy extends Mock implements Client { }
 
-class HttpAdapter {
+class HttpAdapter implements HttpClient {
   final Client client;
 
   HttpAdapter({
     @required this.client
   });
 
-  Future<void> request({
+  @override
+  Future<Map> request({
     @required final String url,
     @required final String method,
     Map body
@@ -27,7 +29,12 @@ class HttpAdapter {
     };
 
     final bodyJson = body != null ? jsonEncode(body) : null;
-    this.client.post(url, headers: headers, body: bodyJson);
+    final response = await this.client.post(url, headers: headers, body: bodyJson);
+
+    return {
+      'statusCode': 200,
+      'body': jsonDecode(response.body)
+    };
   }
 }
 
@@ -45,6 +52,12 @@ void main () {
   group('HttpMethod - POST', () {
 
     test('Test - Deve fazer uma chamada POST com os dados corretos', () {
+      when(client.post(
+          any,
+          body: anyNamed('body'),
+          headers: anyNamed('headers')
+      )).thenAnswer((_) async => Response('{"key":"value"}', 200));
+
       sut.request(url: url, method: 'POST', body: {'key': 'value'});
 
       verify(client.post(
@@ -58,12 +71,33 @@ void main () {
     });
 
     test('Test - Deve fazer uma chamada POST sem dados no body', () {
+      when(client.post(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => Response('{"key":"value"}', 200));
+
       sut.request(url: url, method: 'POST');
 
       verify(client.post(
           any,
           headers: anyNamed('headers')
       ));
+    });
+
+    test('Test - Deve fazer uma chamada POST com dados de retorno', () async {
+      when(client.post(any, headers: anyNamed('headers')))
+        .thenAnswer((_) async => Response('{"key":"value"}', 200));
+
+      final response = await sut.request(url: url, method: 'POST');
+
+      expect(response['body'], {'key': 'value'});
+    });
+
+    test('Test - Deve fazer uma chamada POST com retorno - HttpSatus 200', () async {
+      when(client.post(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => Response('{"key":"value"}', 200));
+
+      final response = await sut.request(url: url, method: 'POST');
+
+      expect(response['statusCode'], 200);
     });
 
   });

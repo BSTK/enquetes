@@ -2,8 +2,8 @@
 
 > ## Sucesso
 1. ✅ Fazer um request com verbo http valido (POST)
-2. Enviar nos headers o content type JSON
-3. Enviar nos headers o body correto
+2. ✅ Enviar nos headers o content type JSON
+3. ✅ Enviar nos headers o body correto
 4. HttpStatus 200 - OK: Resposta com os dados
 5. HttpStatus 204 - OK: Resposta sem dados
 
