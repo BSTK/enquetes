@@ -1,1 +1,1 @@
-export './conta_autenticacao.dart';
+export './conta_autenticacada.dart';

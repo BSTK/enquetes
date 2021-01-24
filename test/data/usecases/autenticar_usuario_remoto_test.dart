@@ -26,6 +26,15 @@ void main() {
   });
 
   test('Test - Deve chamar o HttpClient com parâmetros corretos', () async {
+    when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')
+    )).thenAnswer((_) async => {
+      'acessToken': faker.person.name(),
+      'name': faker.guid.guid()
+    });
+
     sut.autenticar(params);
 
     verify(httpClient.request(
@@ -81,6 +90,24 @@ void main() {
     final future = sut.autenticar(params);
 
     expect(future, throwsA(DomainError.invalidCredentials));
+  });
+
+  test('Test - Deve retornar uma conta autenticada quando HttpClient retornar código 200', () async {
+    final name = faker.person.name();
+    final acessToken = faker.guid.guid();
+
+    when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')
+    )).thenAnswer((_) async => {
+      'acessToken': acessToken,
+      'name': name
+    });
+
+    final contaAutenticada = await sut.autenticar(params);
+
+    expect(contaAutenticada.token, equals(acessToken));
   });
 
 }
