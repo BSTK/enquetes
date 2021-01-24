@@ -7,19 +7,19 @@
 4. Sistema deve entregar os dados da conta do usuário
 
 > ## Caso de Exceção - URL inválida
-1. Sistema deve apresentar uma mensagem de erro inesperado
+1. ✅ Sistema deve apresentar uma mensagem de erro inesperado
 
 > ## Caso de Exceção - Dados inválidos
-1. Sistema deve apresentar uma mensagem de dados inválidos
+1. ✅ Sistema deve apresentar uma mensagem de dados inválidos
 
 > ## Caso de Exceção - Resposta inválida
-1. Sistema deve apresentar uma mensagem de erro inesperado
+1. ✅ Sistema deve apresentar uma mensagem de erro inesperado
 
 > ## Caso de Exceção - Falha no servidor
-1. Sistema deve apresentar uma mensagem de erro inesperado
+1. ✅ Sistema deve apresentar uma mensagem de erro inesperado
 
 > ## Caso de Exceção - URL inválida
-1. Sistema deve apresentar uma mensagem de erro inesperado
+1. ✅ Sistema deve apresentar uma mensagem de erro inesperado
 
 > ## Caso de Exceção - Credenciais inválidas
-1. Sistema deve apresentar uma mensagem que o login/senha informado é inválido
+1. ✅ Sistema deve apresentar uma mensagem que o login/senha informado é inválido
