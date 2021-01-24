@@ -22,10 +22,12 @@ class HttpAdapter {
     Map body
   }) async {
     final headers = {
-      HttpHeaders.contentTypeHeader : 'application/json',
-      HttpHeaders.acceptHeader: 'application/json'
+      HttpHeaders.acceptHeader: 'application/json',
+      HttpHeaders.contentTypeHeader : 'application/json'
     };
-    this.client.post(url, headers: headers, body: jsonEncode(body));
+
+    final bodyJson = body != null ? jsonEncode(body) : null;
+    this.client.post(url, headers: headers, body: bodyJson);
   }
 }
 
@@ -52,6 +54,15 @@ void main () {
             HttpHeaders.acceptHeader: 'application/json'
         },
         body: '{"key":"value"}'
+      ));
+    });
+
+    test('Test - Deve fazer uma chamada POST sem dados no body', () {
+      sut.request(url: url, method: 'POST');
+
+      verify(client.post(
+          any,
+          headers: anyNamed('headers')
       ));
     });
 
