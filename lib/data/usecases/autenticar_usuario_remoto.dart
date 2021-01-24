@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 
 const String METODO_POST = 'POST';
 
-class AutenticarUsuarioRemoto {
+class AutenticarUsuarioRemoto implements Autenticacao {
   final String url;
   final HttpClient httpClient;
 
@@ -16,7 +16,8 @@ class AutenticarUsuarioRemoto {
     @required this.httpClient,
   });
 
-  Future<ContaAutenticacada> autenticar(final AutenticacaoParams params) async {
+  @override
+  Future<ContaAutenticacada> autenticar({AutenticacaoParams params}) async {
     try {
       final body = AutenticarUsuarioRemotoParams.from(params).toJson();
       final httpResponse = await this.httpClient.request(
@@ -31,8 +32,8 @@ class AutenticarUsuarioRemoto {
 
     } on HttpError catch(error) {
       throw error == HttpError.unauthorized
-        ? DomainError.invalidCredentials
-        : DomainError.unexpected;
+          ? DomainError.invalidCredentials
+          : DomainError.unexpected;
     }
   }
 

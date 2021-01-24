@@ -44,7 +44,7 @@ void main() {
   test('Test - Deve chamar o HttpClient com parâmetros corretos', () async {
     mockWhenSucesso({ 'acessToken': faker.person.name(), 'name': faker.guid.guid()});
 
-    sut.autenticar(params);
+    sut.autenticar(params: params);
 
     verify(httpClient.request(
       url: url,
@@ -56,35 +56,35 @@ void main() {
   test('Test - Deve lançar erro quando HttpClient retornar código 400', () async {
     mockWhenErro(HttpError.badRequest);
 
-    final future = sut.autenticar(params);
+    final future = sut.autenticar(params: params);
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 404', () async {
     mockWhenErro(HttpError.notFound);
 
-    final future = sut.autenticar(params);
+    final future = sut.autenticar(params: params);
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 500', () async {
     mockWhenErro(HttpError.serverError);
 
-    final future = sut.autenticar(params);
+    final future = sut.autenticar(params: params);
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 401', () async {
     mockWhenErro(HttpError.unauthorized);
 
-    final future = sut.autenticar(params);
+    final future = sut.autenticar(params: params);
     expect(future, throwsA(DomainError.invalidCredentials));
   });
 
   test('Test - Deve lançar erro quando HttpClient retornar código 200 mas com dados inválidos', () async {
     mockWhenSucesso({'invalid_key': 'invalid_value'});
 
-    final future = sut.autenticar(params);
+    final future = sut.autenticar(params: params);
     expect(future, throwsA(DomainError.unexpected));
   });
 
@@ -94,7 +94,7 @@ void main() {
 
     mockWhenSucesso({ 'acessToken': acessToken, 'name': name});
 
-    final contaAutenticada = await sut.autenticar(params);
+    final contaAutenticada = await sut.autenticar(params: params);
     expect(contaAutenticada.token, equals(acessToken));
   });
 
