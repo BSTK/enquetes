@@ -8,7 +8,7 @@
 5. ✅ HttpStatus 204 - OK: Resposta sem dados
 
 > ## Erros
-1. Bad Request - HttpStatus 400
+1. ✅ Bad Request - HttpStatus 400
 2. Unauthorized - HttpStatus 401
 3. Forbidden - HttpStatus 403
 4. Not Found - HttpStatus 404

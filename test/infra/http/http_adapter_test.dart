@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:enquetes/data/http/http.dart';
 import 'package:enquetes/infra/infra.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -82,9 +83,20 @@ void main () {
       expect(response, null);
     });
 
+    test('Test - Deve fazer uma chamada POST retorno HttpSatus 400', () async {
+      mockWhen(statusCode: 400);
+
+      final future = sut.request(url: url, method: 'POST');
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('Test - Deve fazer uma chamada POST retorno HttpSatus 400', () async {
+      mockWhen(statusCode: 400, responseBody: '');
+
+      final future = sut.request(url: url, method: 'POST');
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
   });
 
-  group('HttpMethod - GET', () {
-
-  });
 }

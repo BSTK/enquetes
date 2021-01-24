@@ -33,8 +33,14 @@ class HttpAdapter implements HttpClient {
         ? jsonDecode(response.body)
         : null;
 
-    return HttpStatus.ok == response.statusCode
-        ? responseJsonDecode
-        : null;
+    if (HttpStatus.badRequest == response.statusCode) {
+      throw HttpError.badRequest;
+    }
+
+    if (HttpStatus.ok == response.statusCode) {
+      return HttpStatus.ok == response.statusCode
+          ? responseJsonDecode
+          : null;
+    }
   }
 }
