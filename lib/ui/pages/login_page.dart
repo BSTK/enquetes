@@ -1,3 +1,4 @@
+import 'package:enquetes/ui/components/components.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -6,46 +7,15 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-                child: Image.asset(
-                  'lib/ui/assets/logo.png',
-                  color: Colors.redAccent,
-                )
-            ),
-            Text('Login'.toUpperCase()),
-            Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        icon: Icon(Icons.email),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Senha',
-                        icon: Icon(Icons.lock),
-                      ),
-                      obscureText: true,
-                    ),
-                    RaisedButton(
-                      onPressed: () {},
-                      child: Text('Login'.toUpperCase()),
-                    ),
-                    FlatButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.person),
-                      label: Text('Criar conta')
-                    )
-                  ],
-                )
-            )
+            LoginHeader(),
+            TextHeaderH1('Login'),
+            LoginForm()
           ],
         ),
       ),
     );
   }
 }
+
