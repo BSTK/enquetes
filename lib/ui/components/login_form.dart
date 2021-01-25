@@ -32,7 +32,7 @@ class LoginForm extends StatelessWidget {
               Container(
                 width: double.infinity,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: null,
                   child: Text('Login'.toUpperCase()),
                 ),
               ),
