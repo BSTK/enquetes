@@ -53,7 +53,7 @@ class App extends StatelessWidget {
           alignLabelWithHint: true
         )
       ),
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 

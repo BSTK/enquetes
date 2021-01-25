@@ -1,9 +1,11 @@
+import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({
-    Key key,
-  }) : super(key: key);
+
+  final LoginPresenter presenter;
+
+  const LoginForm(this.presenter);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class LoginForm extends StatelessWidget {
                   icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
                 ),
                 keyboardType: TextInputType.emailAddress,
+                onChanged: presenter.validarEmail,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 32.0),
@@ -27,6 +30,7 @@ class LoginForm extends StatelessWidget {
                     icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
                   ),
                   obscureText: true,
+                  onChanged: presenter.validarSenha,
                 ),
               ),
               Container(
