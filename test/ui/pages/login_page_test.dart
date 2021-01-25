@@ -4,12 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
 
-  testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
-    final loginPage = MaterialApp(
-        home: LoginPage()
-    );
-
+  Future<void> carregarLoginPage(final WidgetTester tester) async {
+    final loginPage = MaterialApp(home: LoginPage());
     await tester.pumpWidget(loginPage);
+  }
+
+  testWidgets('Test - Deve validadar login com dados corretos', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+  });
+
+  testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
     
     final emailTextChildren = find.descendant(
         of: find.bySemanticsLabel('Email'),
