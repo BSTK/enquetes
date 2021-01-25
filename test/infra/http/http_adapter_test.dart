@@ -33,6 +33,14 @@ void main () {
 
   group('HttpMethod - POST', () {
 
+    void mockWhenErro() {
+      when(client.post(
+          any,
+          body: anyNamed('body'),
+          headers: anyNamed('headers')
+      )).thenThrow(Exception());
+    }
+
     void mockWhen({
       final int statusCode = 200,
       final String responseBody = '{"key":"value"}'}) {
@@ -124,6 +132,13 @@ void main () {
 
     test('Test - Deve fazer uma chamada POST retorno HttpError.serverError HttpSatus 500', () async {
       mockWhen(statusCode: 500, responseBody: '');
+
+      final future = sut.request(url: url, method: 'POST');
+      expect(future, throwsA(HttpError.serverError));
+    });
+
+    test('Test - Deve fazer uma chamada POST retorno HttpError.serverError HttpSatus 500', () async {
+      mockWhenErro();
 
       final future = sut.request(url: url, method: 'POST');
       expect(future, throwsA(HttpError.serverError));

@@ -18,19 +18,23 @@ class HttpAdapter implements HttpClient {
     @required final String method,
     Map body
   }) async {
+    try {
+      if (!HTTP_METHODS.contains(method.toUpperCase())) {
+        throw HttpError.serverError;
+      }
 
-    if (!HTTP_METHODS.contains(method.toUpperCase())) {
+      final headers = {
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.contentTypeHeader : 'application/json'
+      };
+
+      final bodyJson = body != null ? jsonEncode(body) : null;
+      final response = await this.client.post(url, headers: headers, body: bodyJson);
+
+      return _handleresponse(response);
+    } on Exception {
       throw HttpError.serverError;
     }
-
-    final headers = {
-      HttpHeaders.acceptHeader: 'application/json',
-      HttpHeaders.contentTypeHeader : 'application/json'
-    };
-
-    final bodyJson = body != null ? jsonEncode(body) : null;
-    final response = await this.client.post(url, headers: headers, body: bodyJson);
-    return _handleresponse(response);
   }
 
   Map _handleresponse(final Response response) {
