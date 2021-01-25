@@ -15,12 +15,22 @@ dependencies:
   http:
 
 dev_dependencies:
+  flutter_launcher_icons:
   flutter_test:
     sdk: flutter
   test:
   mockito:
   faker:
   image_test_utils:
+
+# Configuração do icone do app
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: lib/ui/assets/icons/ios.png
+  image_path_android: lib/ui/assets/icons/android.png
+  adaptive_icon_background: lib/ui/assets/icons/background.png
+  adaptive_icon_foreground: lib/ui/assets/icons/foreground.png
 
 # The following section is specific to Flutter.
 flutter:
