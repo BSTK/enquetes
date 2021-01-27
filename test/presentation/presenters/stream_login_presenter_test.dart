@@ -60,4 +60,16 @@ void main() {
     sut.validarEmail(email);
     sut.validarEmail(email);
   });
+
+  test('Test - Deve emitir null na validação ao validar senha correta', () {
+    sut.senhaErrorStream.listen(
+        expectAsync1((error) => expect(error, null)));
+
+    sut.formularioValidoStream.listen(
+        expectAsync1((isValido) => expect(isValido, false)));
+
+    sut.validarSenha(senha);
+    sut.validarSenha(senha);
+    sut.validarSenha(senha);
+  });
 }
