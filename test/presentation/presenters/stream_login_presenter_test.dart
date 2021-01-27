@@ -29,21 +29,26 @@ class StreamLoginPresenter {
 }
 
 void main() {
-  test('Test - Deve fazer validacao com email correto', () async {
-    final validation = ValidationSpy();
-    final sut = StreamLoginPresenter(validation: validation);
-    final email = faker.internet.email();
 
+  String email;
+  String senha;
+  ValidationSpy validation;
+  StreamLoginPresenter sut;
+
+  setUp(() {
+    validation = ValidationSpy();
+    sut = StreamLoginPresenter(validation: validation);
+    email = faker.internet.email();
+    senha = faker.internet.password();
+  });
+
+  test('Test - Deve fazer validacao com email correto', () async {
     sut.validarEmail(email);
 
     verify(validation.validate(campo: 'email', valor: email)).called(1);
   });
 
   test('Test - Deve fazer validacao com senha correta', () async {
-    final validation = ValidationSpy();
-    final sut = StreamLoginPresenter(validation: validation);
-    final senha = faker.internet.password();
-
     sut.validarSenha(senha);
 
     verify(validation.validate(campo: 'senha', valor: senha)).called(1);
