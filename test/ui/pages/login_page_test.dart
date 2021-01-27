@@ -132,6 +132,17 @@ void main() {
     expect(buttonLogin.onPressed, null);
   });
 
+  testWidgets('Test - Deve autenticar o usuário quando o formulario for submetido', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    formularioValidoController.add(true);
+    await tester.pump();
+    await tester.tap(find.byType(RaisedButton));
+    await tester.pump();
+
+    verify(presenter.autenticar()).called(1);
+  });
+
   testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
     await carregarLoginPage(tester);
     

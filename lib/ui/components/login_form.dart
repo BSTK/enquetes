@@ -53,7 +53,9 @@ class LoginForm extends StatelessWidget {
                   stream: presenter.formularioValidoStream,
                   builder: (context, snapshot) {
                     return RaisedButton(
-                      onPressed: snapshot.data == true ? () {} : null,
+                      onPressed: snapshot.data == true
+                          ? presenter.autenticar
+                          : null,
                       child: Text('Login'.toUpperCase()),
                     );
                   }
@@ -62,15 +64,10 @@ class LoginForm extends StatelessWidget {
 
               Container(
                 width: double.infinity,
-                child: StreamBuilder<bool>(
-                  stream: presenter.formularioValidoStream,
-                  builder: (context, snapshot) {
-                    return FlatButton.icon(
-                        onPressed: snapshot.data == true ? () {} : null,
-                        icon: Icon(Icons.person),
-                        label: Text('Criar conta')
-                    );
-                  }
+                child: FlatButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.person),
+                    label: Text('Criar conta')
                 ),
               )
             ],
