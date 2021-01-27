@@ -10,10 +10,10 @@ class StreamLoginPresenter {
   var _state = LoginState();
 
   Stream<String> get emailErrorStream =>
-      _controller.stream.map((state) => state.emailError);
+      _controller.stream.map((state) => state.emailError).distinct();
 
   Stream<String> get senhaErrorStream =>
-      _controller.stream.map((state) => state.senhaError);
+      _controller.stream.map((state) => state.senhaError).distinct();
 
   StreamLoginPresenter({
     @required final this.validation

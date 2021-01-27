@@ -1,7 +1,7 @@
-import 'package:enquetes/presentation/presentation.dart';
 import 'package:faker/faker.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:enquetes/presentation/presentation.dart';
 
 class ValidationSpy extends Mock implements Validation { }
 
@@ -31,10 +31,18 @@ void main() {
     when(validation.validate(campo: 'email', valor: email)).thenReturn('email_error');
     when(validation.validate(campo: 'senha', valor: senha)).thenReturn('senha_error');
 
-    expectLater(sut.emailErrorStream, emits('email_error'));
-    expectLater(sut.senhaErrorStream, emits('senha_error'));
+    sut.emailErrorStream.listen(
+        expectAsync1((error) => expect(error, 'email_error')));
+
+    sut.senhaErrorStream.listen(
+        expectAsync1((error) => expect(error, 'senha_error')));
 
     sut.validarEmail(email);
+    sut.validarEmail(email);
+    sut.validarEmail(email);
+
+    sut.validarSenha(senha);
+    sut.validarSenha(senha);
     sut.validarSenha(senha);
   });
 }
