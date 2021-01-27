@@ -1,4 +1,4 @@
-import 'package:enquetes/ui/components/components.dart';
+import 'package:enquetes/ui/widgets/widgets.dart';
 import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 
@@ -27,37 +27,15 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) {
           widget.presenter.loadingStream.listen((isLoading) {
             if (isLoading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                child: SimpleDialog(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 10.0),
-                        Text('Aguarde ...', textAlign: TextAlign.center)
-                      ],
-                    )
-                  ],
-                )
-              );
+              showLoadingDialog(context);
             } else {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              }
+              hideLoadingDialog(context);
             }
           });
 
           widget.presenter.mainErrorStream.listen((error) {
             if (error != null && error.isNotEmpty) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.redAccent[900],
-                  content: Text(error, textAlign: TextAlign.center)
-                )
-              );
+              showErrorDialog(context, error);
             }
           });
 
