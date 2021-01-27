@@ -13,13 +13,16 @@ void main() {
   LoginPresenter presenter;
   StreamController<String> emailErrorController;
   StreamController<String> senhaErrorController;
+  StreamController<bool> formularioValidoController;
 
   Future<void> carregarLoginPage(final WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<String>();
     senhaErrorController = StreamController<String>();
+    formularioValidoController = StreamController<bool>();
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.senhaErrorStream).thenAnswer((_) => senhaErrorController.stream);
+    when(presenter.formularioValidoStream).thenAnswer((_) => formularioValidoController.stream);
 
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
@@ -28,6 +31,7 @@ void main() {
   tearDown(() {
     emailErrorController.close();
     senhaErrorController.close();
+    formularioValidoController.close();
   });
 
   testWidgets('Test - Deve validadar login com dados corretos', (WidgetTester tester) async {
@@ -106,6 +110,26 @@ void main() {
         find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
         findsOneWidget
     );
+  });
+
+  testWidgets('Test - Deve habilitar o botao de login caso os dados estejam válidos', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    formularioValidoController.add(true);
+    await tester.pump();
+
+    final buttonLogin = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(buttonLogin.onPressed, isNotNull);
+  });
+
+  testWidgets('Test - Deve desabilitar o botao de login caso os dados estejam inválidos', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    formularioValidoController.add(false);
+    await tester.pump();
+
+    final buttonLogin = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(buttonLogin.onPressed, null);
   });
 
   testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
