@@ -30,13 +30,19 @@ class LoginForm extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 32.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Senha',
-                    icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
-                  ),
-                  obscureText: true,
-                  onChanged: presenter.validarSenha,
+                child: StreamBuilder<String>(
+                  stream: presenter.senhaErrorStream,
+                  builder: (context, snapshot) {
+                    return TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Senha',
+                        errorText: snapshot.data?.isNotEmpty == true ? snapshot.data : null,
+                        icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
+                      ),
+                      obscureText: true,
+                      onChanged: presenter.validarSenha,
+                    );
+                  }
                 ),
               ),
               Container(

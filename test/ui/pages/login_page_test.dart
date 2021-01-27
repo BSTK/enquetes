@@ -17,7 +17,9 @@ void main() {
   Future<void> carregarLoginPage(final WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<String>();
+    senhaErrorController = StreamController<String>();
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
+    when(presenter.senhaErrorStream).thenAnswer((_) => senhaErrorController.stream);
 
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
@@ -25,6 +27,7 @@ void main() {
 
   tearDown(() {
     emailErrorController.close();
+    senhaErrorController.close();
   });
 
   testWidgets('Test - Deve validadar login com dados corretos', (WidgetTester tester) async {
@@ -68,6 +71,39 @@ void main() {
 
     expect(
         find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
+        findsOneWidget
+    );
+  });
+
+  testWidgets('Test - Deve validar o login caso o senha seja inválida', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    senhaErrorController.add('senha_error');
+    await tester.pump();
+
+    expect(find.text('senha_error'), findsOneWidget);
+  });
+
+  testWidgets('Test - Deve validar o login caso o senha válida', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    senhaErrorController.add(null);
+    await tester.pump();
+
+    expect(
+        find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
+        findsOneWidget
+    );
+  });
+
+  testWidgets('Test - Deve validar o login caso o senha válida (com string vazia)', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    senhaErrorController.add('');
+    await tester.pump();
+
+    expect(
+        find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
         findsOneWidget
     );
   });
