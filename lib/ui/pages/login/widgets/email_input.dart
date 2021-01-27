@@ -1,16 +1,12 @@
 import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EmailInput extends StatelessWidget {
-  const EmailInput({
-    Key key,
-    @required this.presenter,
-  }) : super(key: key);
-
-  final LoginPresenter presenter;
 
   @override
   Widget build(BuildContext context) {
+    final presenter = Provider.of<LoginPresenter>(context);
     return StreamBuilder<String>(
         stream: presenter.emailErrorStream,
         builder: (context, snapshot) {
@@ -26,4 +22,5 @@ class EmailInput extends StatelessWidget {
         }
     );
   }
+
 }

@@ -1,16 +1,12 @@
 import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PasswordInput extends StatelessWidget {
-  const PasswordInput({
-    Key key,
-    @required this.presenter,
-  }) : super(key: key);
-
-  final LoginPresenter presenter;
 
   @override
   Widget build(BuildContext context) {
+    final presenter = Provider.of<LoginPresenter>(context);
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 32.0),
       child: StreamBuilder<String>(
@@ -29,4 +25,5 @@ class PasswordInput extends StatelessWidget {
       ),
     );
   }
+
 }
