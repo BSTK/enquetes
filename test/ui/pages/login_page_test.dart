@@ -47,6 +47,41 @@ void main() {
     formularioValidoController.close();
   });
 
+  testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    final emailTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Email'),
+        matching: find.byType(Text)
+    );
+
+    expect(
+        emailTextChildren,
+        findsOneWidget,
+        reason:
+        'Quando o TextFormField tiver apenas um filho do tipo Text, '
+            'então significa que não há erros, pois sempre terá apenas um '
+            'elemento filho que será o labelText'
+    );
+
+    final senhaTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Senha'),
+        matching: find.byType(Text)
+    );
+
+    expect(
+        senhaTextChildren,
+        findsOneWidget,
+        reason:
+        'Quando o TextFormField tiver apenas um filho do tipo Text, '
+            'então significa que não há erros, pois sempre terá apenas um '
+            'elemento filho que será o labelText'
+    );
+
+    final buttonLogin = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(buttonLogin.onPressed, null);
+  });
+
   testWidgets('Test - Deve validadar login com dados corretos', (WidgetTester tester) async {
     await carregarLoginPage(tester);
 
@@ -182,39 +217,13 @@ void main() {
     expect(find.byType(SnackBar), findsOneWidget);
   });
 
-  testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
+  testWidgets('Test - Deve fechar todos os streams quando a tela for destruida',
+          (WidgetTester tester) async {
     await carregarLoginPage(tester);
-    
-    final emailTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Email'),
-        matching: find.byType(Text)
-    );
 
-    expect(
-      emailTextChildren,
-      findsOneWidget,
-      reason:
-        'Quando o TextFormField tiver apenas um filho do tipo Text, '
-        'então significa que não há erros, pois sempre terá apenas um '
-        'elemento filho que será o labelText'
-    );
-
-    final senhaTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Senha'),
-        matching: find.byType(Text)
-    );
-
-    expect(
-        senhaTextChildren,
-        findsOneWidget,
-        reason:
-        'Quando o TextFormField tiver apenas um filho do tipo Text, '
-        'então significa que não há erros, pois sempre terá apenas um '
-        'elemento filho que será o labelText'
-    );
-
-    final buttonLogin = tester.widget<RaisedButton>(find.byType(RaisedButton));
-    expect(buttonLogin.onPressed, null);
+    addTearDown(() {
+      verify(presenter.dispose()).called(1);
+    });
   });
 
 }

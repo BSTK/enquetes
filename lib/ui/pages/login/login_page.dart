@@ -2,18 +2,30 @@ import 'package:enquetes/ui/components/components.dart';
 import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
 
   final LoginPresenter presenter;
 
   const LoginPage(this.presenter);
 
   @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.presenter.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          presenter.loadingStream.listen((isLoading) {
+          widget.presenter.loadingStream.listen((isLoading) {
             if (isLoading) {
               showDialog(
                 context: context,
@@ -38,7 +50,7 @@ class LoginPage extends StatelessWidget {
             }
           });
 
-          presenter.mainErrorStream.listen((error) {
+          widget.presenter.mainErrorStream.listen((error) {
             if (error != null && error.isNotEmpty) {
               Scaffold.of(context).showSnackBar(
                 SnackBar(
@@ -55,7 +67,7 @@ class LoginPage extends StatelessWidget {
               children: [
                 LoginHeader(),
                 TextHeaderH1('Login'),
-                LoginForm(presenter)
+                LoginForm(widget.presenter)
               ],
             ),
           );
