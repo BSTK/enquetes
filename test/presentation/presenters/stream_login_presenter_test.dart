@@ -37,6 +37,9 @@ void main() {
     sut.senhaErrorStream.listen(
         expectAsync1((error) => expect(error, 'senha_error')));
 
+    sut.formularioValidoStream.listen(
+        expectAsync1((isValido) => expect(isValido, false)));
+
     sut.validarEmail(email);
     sut.validarEmail(email);
     sut.validarEmail(email);

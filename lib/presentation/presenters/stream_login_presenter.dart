@@ -15,6 +15,9 @@ class StreamLoginPresenter {
   Stream<String> get senhaErrorStream =>
       _controller.stream.map((state) => state.senhaError).distinct();
 
+  Stream<bool> get formularioValidoStream =>
+      _controller.stream.map((state) => state.isformularioValido).distinct();
+
   StreamLoginPresenter({
     @required final this.validation
   });
