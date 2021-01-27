@@ -11,17 +11,24 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 void main() {
 
   LoginPresenter presenter;
+  StreamController<bool> loadingController;
+  StreamController<bool> formularioValidoController;
+
   StreamController<String> emailErrorController;
   StreamController<String> senhaErrorController;
-  StreamController<bool> formularioValidoController;
 
   Future<void> carregarLoginPage(final WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<String>();
     senhaErrorController = StreamController<String>();
+
+    loadingController = StreamController<bool>();
     formularioValidoController = StreamController<bool>();
+
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.senhaErrorStream).thenAnswer((_) => senhaErrorController.stream);
+
+    when(presenter.loadingStream).thenAnswer((_) => loadingController.stream);
     when(presenter.formularioValidoStream).thenAnswer((_) => formularioValidoController.stream);
 
     final loginPage = MaterialApp(home: LoginPage(presenter));
@@ -31,6 +38,8 @@ void main() {
   tearDown(() {
     emailErrorController.close();
     senhaErrorController.close();
+
+    loadingController.close();
     formularioValidoController.close();
   });
 
@@ -141,6 +150,28 @@ void main() {
     await tester.pump();
 
     verify(presenter.autenticar()).called(1);
+  });
+
+  testWidgets(
+      'Test - Deve mostrar um CircularProgressIndicator(loagind) quando o '
+      'usuário estiver se autenticando ', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    loadingController.add(true);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets(
+      'Test - Deve esconder o CircularProgressIndicator(loagind) '
+      'quando der erro na autenticação do usuário ', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    loadingController.add(false);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {

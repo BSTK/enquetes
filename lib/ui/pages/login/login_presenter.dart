@@ -1,7 +1,9 @@
 abstract class LoginPresenter {
-  Stream get emailErrorStream;
-  Stream get senhaErrorStream;
-  Stream get formularioValidoStream;
+  Stream<String> get emailErrorStream;
+  Stream<String> get senhaErrorStream;
+
+  Stream<bool> get loadingStream;
+  Stream<bool> get formularioValidoStream;
 
   void autenticar();
   void validarEmail(final String email);
