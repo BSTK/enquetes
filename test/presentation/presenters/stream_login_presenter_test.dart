@@ -72,4 +72,21 @@ void main() {
     sut.validarSenha(senha);
     sut.validarSenha(senha);
   });
+
+  test('Test - Deve emitir error na validação ao validar email incorreto e senha correta', () {
+    when(validation.validate(campo: 'email', valor: email)).thenReturn('email_error');
+
+    sut.emailErrorStream.listen(
+        expectAsync1((error) => expect(error, 'email_error')));
+
+    sut.senhaErrorStream.listen(
+        expectAsync1((error) => expect(error, null)));
+
+    sut.formularioValidoStream.listen(
+        expectAsync1((isValido) => expect(isValido, false)));
+
+    sut.validarEmail(email);
+    sut.validarSenha(senha);
+  });
+
 }
