@@ -20,7 +20,7 @@ class LoginForm extends StatelessWidget {
                   return TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      errorText: snapshot.data,
+                      errorText: snapshot.data?.isNotEmpty == true ? snapshot.data : null,
                       icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
                     ),
                     keyboardType: TextInputType.emailAddress,

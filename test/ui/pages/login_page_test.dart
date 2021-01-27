@@ -48,6 +48,30 @@ void main() {
     expect(find.text('email_error'), findsOneWidget);
   });
 
+  testWidgets('Test - Deve validar o login caso o email válido', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    emailErrorController.add(null);
+    await tester.pump();
+
+    expect(
+        find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
+        findsOneWidget
+    );
+  });
+
+  testWidgets('Test - Deve validar o login caso o email válido (com string vazia)', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    emailErrorController.add('');
+    await tester.pump();
+
+    expect(
+        find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
+        findsOneWidget
+    );
+  });
+
   testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
     await carregarLoginPage(tester);
     
