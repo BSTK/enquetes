@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,17 +12,28 @@ abstract class Validation {
   });
 }
 
+class LoginState {
+  String emailError;
+}
+
 class ValidationSpy extends Mock implements Validation { }
 
 class StreamLoginPresenter {
   final Validation validation;
+  final _controller = StreamController<LoginState>.broadcast();
+
+  var _state = LoginState();
+
+  Stream<String> get emailErrorStream =>
+      _controller.stream.map((state) => state.emailError);
 
   StreamLoginPresenter({
     @required final this.validation
   });
 
   void validarEmail(final String email) {
-    validation.validate(campo: 'email', valor: email);
+    _state.emailError = validation.validate(campo: 'email', valor: email);
+    _controller.add(_state);
   }
 
   void validarSenha(final String senha) {
@@ -52,5 +65,14 @@ void main() {
     sut.validarSenha(senha);
 
     verify(validation.validate(campo: 'senha', valor: senha)).called(1);
+  });
+
+  test('Test - Deve emitir erro de validação ao validar email incorreto', () {
+    when(validation.validate(campo: anyNamed('campo'), valor: anyNamed('valor')))
+        .thenReturn('email_error');
+
+    expectLater(sut.emailErrorStream, emits('email_error'));
+
+    sut.validarEmail(email);
   });
 }
