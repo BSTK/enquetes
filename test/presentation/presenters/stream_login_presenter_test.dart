@@ -1,7 +1,7 @@
-import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:enquetes/presentation/presentation.dart';
+import 'package:faker/faker.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 class ValidationSpy extends Mock implements Validation { }
 
@@ -31,14 +31,9 @@ void main() {
     when(validation.validate(campo: 'email', valor: email)).thenReturn('email_error');
     when(validation.validate(campo: 'senha', valor: senha)).thenReturn('senha_error');
 
-    sut.emailErrorStream.listen(
-        expectAsync1((error) => expect(error, 'email_error')));
-
-    sut.senhaErrorStream.listen(
-        expectAsync1((error) => expect(error, 'senha_error')));
-
-    sut.formularioValidoStream.listen(
-        expectAsync1((isValido) => expect(isValido, false)));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'email_error')));
+    sut.senhaErrorStream.listen(expectAsync1((error) => expect(error, 'senha_error')));
+    sut.formularioValidoStream.listen(expectAsync1((isValido) => expect(isValido, false)));
 
     sut.validarEmail(email);
     sut.validarEmail(email);
@@ -50,11 +45,8 @@ void main() {
   });
 
   test('Test - Deve emitir null na validação ao validar email correto', () {
-    sut.emailErrorStream.listen(
-        expectAsync1((error) => expect(error, null)));
-
-    sut.formularioValidoStream.listen(
-        expectAsync1((isValido) => expect(isValido, false)));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.formularioValidoStream.listen(expectAsync1((isValido) => expect(isValido, false)));
 
     sut.validarEmail(email);
     sut.validarEmail(email);
@@ -62,11 +54,8 @@ void main() {
   });
 
   test('Test - Deve emitir null na validação ao validar senha correta', () {
-    sut.senhaErrorStream.listen(
-        expectAsync1((error) => expect(error, null)));
-
-    sut.formularioValidoStream.listen(
-        expectAsync1((isValido) => expect(isValido, false)));
+    sut.senhaErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.formularioValidoStream.listen(expectAsync1((isValido) => expect(isValido, false)));
 
     sut.validarSenha(senha);
     sut.validarSenha(senha);
@@ -76,14 +65,9 @@ void main() {
   test('Test - Deve emitir error na validação ao validar email incorreto e senha correta', () {
     when(validation.validate(campo: 'email', valor: email)).thenReturn('email_error');
 
-    sut.emailErrorStream.listen(
-        expectAsync1((error) => expect(error, 'email_error')));
-
-    sut.senhaErrorStream.listen(
-        expectAsync1((error) => expect(error, null)));
-
-    sut.formularioValidoStream.listen(
-        expectAsync1((isValido) => expect(isValido, false)));
+    sut.senhaErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'email_error')));
+    sut.formularioValidoStream.listen(expectAsync1((isValido) => expect(isValido, false)));
 
     sut.validarEmail(email);
     sut.validarSenha(senha);
@@ -92,14 +76,9 @@ void main() {
   test('Test - Deve emitir error na validação ao validar senha incorreta e email correto', () {
     when(validation.validate(campo: 'senha', valor: senha)).thenReturn('senha_error');
 
-    sut.senhaErrorStream.listen(
-        expectAsync1((error) => expect(error, 'senha_error')));
-
-    sut.emailErrorStream.listen(
-        expectAsync1((error) => expect(error, null)));
-
-    sut.formularioValidoStream.listen(
-        expectAsync1((isValido) => expect(isValido, false)));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.senhaErrorStream.listen(expectAsync1((error) => expect(error, 'senha_error')));
+    sut.formularioValidoStream.listen(expectAsync1((isValido) => expect(isValido, false)));
 
     sut.validarEmail(email);
     sut.validarEmail(email);
