@@ -2,6 +2,8 @@ import 'package:enquetes/ui/widgets/widgets.dart';
 import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 
+import 'widgets/widgets.dart';
+
 class LoginPage extends StatefulWidget {
 
   final LoginPresenter presenter;

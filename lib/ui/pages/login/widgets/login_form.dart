@@ -1,6 +1,8 @@
 import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 
+import 'widgets.dart';
+
 class LoginForm extends StatelessWidget {
 
   final LoginPresenter presenter;
@@ -14,39 +16,8 @@ class LoginForm extends StatelessWidget {
       child: Form(
           child: Column(
             children: [
-              StreamBuilder<String>(
-                stream: presenter.emailErrorStream,
-                builder: (context, snapshot) {
-                  return TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      errorText: snapshot.data?.isNotEmpty == true ? snapshot.data : null,
-                      icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: presenter.validarEmail,
-                  );
-                }
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 32.0),
-                child: StreamBuilder<String>(
-                  stream: presenter.senhaErrorStream,
-                  builder: (context, snapshot) {
-                    return TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Senha',
-                        errorText: snapshot.data?.isNotEmpty == true ? snapshot.data : null,
-                        icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
-                      ),
-                      obscureText: true,
-                      onChanged: presenter.validarSenha,
-                    );
-                  }
-                ),
-              ),
-
+              EmailInput(presenter: presenter),
+              PasswordInput(presenter: presenter),
               Container(
                 width: double.infinity,
                 child: StreamBuilder<bool>(
@@ -76,3 +47,4 @@ class LoginForm extends StatelessWidget {
     );
   }
 }
+
