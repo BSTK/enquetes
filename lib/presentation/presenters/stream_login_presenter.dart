@@ -23,12 +23,15 @@ class StreamLoginPresenter {
   });
 
   void validarEmail(final String email) {
+    _state.email = email;
     _state.emailError = validation.validate(campo: 'email', valor: email);
     _controller.add(_state);
   }
 
   void validarSenha(final String senha) {
+    _state.senha = senha;
     _state.senhaError = validation.validate(campo: 'senha', valor: senha);
     _controller.add(_state);
   }
+
 }
