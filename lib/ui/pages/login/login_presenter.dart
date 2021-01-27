@@ -1,4 +1,5 @@
 abstract class LoginPresenter {
+  Stream<String> get mainErrorStream;
   Stream<String> get emailErrorStream;
   Stream<String> get senhaErrorStream;
 

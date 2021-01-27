@@ -14,17 +14,20 @@ void main() {
   StreamController<bool> loadingController;
   StreamController<bool> formularioValidoController;
 
+  StreamController<String> mainErrorController;
   StreamController<String> emailErrorController;
   StreamController<String> senhaErrorController;
 
   Future<void> carregarLoginPage(final WidgetTester tester) async {
     presenter = LoginPresenterSpy();
+    mainErrorController = StreamController<String>();
     emailErrorController = StreamController<String>();
     senhaErrorController = StreamController<String>();
 
     loadingController = StreamController<bool>();
     formularioValidoController = StreamController<bool>();
 
+    when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.senhaErrorStream).thenAnswer((_) => senhaErrorController.stream);
 
@@ -36,6 +39,7 @@ void main() {
   }
 
   tearDown(() {
+    mainErrorController.close();
     emailErrorController.close();
     senhaErrorController.close();
 
@@ -153,25 +157,29 @@ void main() {
   });
 
   testWidgets(
-      'Test - Deve mostrar um CircularProgressIndicator(loagind) quando o '
+      'Test - Deve mostrar/esconder um CircularProgressIndicator(loagind) quando o '
       'usuário estiver se autenticando ', (WidgetTester tester) async {
     await carregarLoginPage(tester);
 
     loadingController.add(true);
     await tester.pump();
-
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
-
-  testWidgets(
-      'Test - Deve esconder o CircularProgressIndicator(loagind) '
-      'quando der erro na autenticação do usuário ', (WidgetTester tester) async {
-    await carregarLoginPage(tester);
 
     loadingController.add(false);
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets(
+      'Test - Deve mostrar uma mensagem de erro quando der '
+      'falha na autenticação do usuário', (WidgetTester tester) async {
+    await carregarLoginPage(tester);
+
+    mainErrorController.add('main_error');
+    await tester.pump();
+
+    expect(find.byType(SnackBar), findsOneWidget);
   });
 
   testWidgets('Test - Deve carrgar a tela de login com estado inicial', (WidgetTester tester) async {
