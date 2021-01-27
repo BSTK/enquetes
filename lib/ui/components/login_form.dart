@@ -59,10 +59,15 @@ class LoginForm extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
-                child: FlatButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.person),
-                    label: Text('Criar conta')
+                child: StreamBuilder<bool>(
+                  stream: presenter.formularioValidoStream,
+                  builder: (context, snapshot) {
+                    return FlatButton.icon(
+                        onPressed: snapshot.data == true ? () {} : null,
+                        icon: Icon(Icons.person),
+                        label: Text('Criar conta')
+                    );
+                  }
                 ),
               )
             ],

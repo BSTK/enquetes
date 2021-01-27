@@ -8,8 +8,8 @@
 5. ✅ Mostrar mensagem de erro caso o email seja inválido
 6. ✅ Remover mensagem de erro caso o email seja inválido
 7. ✅ Validar senha quando o usuário digitar no campo
-8. Mostrar mensagem de erro caso o senha seja inválida
-9. Remover mensagem de erro caso o senha seja inválida
+8. ✅ Mostrar mensagem de erro caso o senha seja inválida
+9. ✅ Remover mensagem de erro caso o senha seja inválida
 10. Habilitar botão de login se todos os campos estiverem válidos
 11. Desabilitar o campo de login caso algum campo esteja inválido
 12. Exibir "loading ..." no inicio da ação de login
