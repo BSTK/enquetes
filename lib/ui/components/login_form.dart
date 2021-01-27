@@ -28,6 +28,7 @@ class LoginForm extends StatelessWidget {
                   );
                 }
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 32.0),
                 child: StreamBuilder<String>(
@@ -45,6 +46,7 @@ class LoginForm extends StatelessWidget {
                   }
                 ),
               ),
+
               Container(
                 width: double.infinity,
                 child: StreamBuilder<bool>(
@@ -57,6 +59,7 @@ class LoginForm extends StatelessWidget {
                   }
                 ),
               ),
+
               Container(
                 width: double.infinity,
                 child: StreamBuilder<bool>(
