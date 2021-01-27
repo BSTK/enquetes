@@ -21,21 +21,7 @@ class LoginForm extends StatelessWidget {
               children: [
                 EmailInput(),
                 PasswordInput(),
-                Container(
-                  width: double.infinity,
-                  child: StreamBuilder<bool>(
-                    stream: presenter.formularioValidoStream,
-                    builder: (context, snapshot) {
-                      return RaisedButton(
-                        onPressed: snapshot.data == true
-                            ? presenter.autenticar
-                            : null,
-                        child: Text('Login'.toUpperCase()),
-                      );
-                    }
-                  ),
-                ),
-
+                LoginButton(),
                 Container(
                   width: double.infinity,
                   child: FlatButton.icon(

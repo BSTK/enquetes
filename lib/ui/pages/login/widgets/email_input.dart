@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EmailInput extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final presenter = Provider.of<LoginPresenter>(context);
@@ -22,5 +21,4 @@ class EmailInput extends StatelessWidget {
         }
     );
   }
-
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class LoginHeader extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,5 +27,4 @@ class LoginHeader extends StatelessWidget {
         child: Image.asset('lib/ui/assets/logo.png')
     );
   }
-
 }
