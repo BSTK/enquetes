@@ -14,6 +14,7 @@ abstract class Validation {
 
 class LoginState {
   String emailError;
+  String senhaError;
 }
 
 class ValidationSpy extends Mock implements Validation { }
@@ -27,6 +28,9 @@ class StreamLoginPresenter {
   Stream<String> get emailErrorStream =>
       _controller.stream.map((state) => state.emailError);
 
+  Stream<String> get senhaErrorStream =>
+      _controller.stream.map((state) => state.senhaError);
+
   StreamLoginPresenter({
     @required final this.validation
   });
@@ -37,7 +41,8 @@ class StreamLoginPresenter {
   }
 
   void validarSenha(final String senha) {
-    validation.validate(campo: 'senha', valor: senha);
+    _state.senhaError = validation.validate(campo: 'senha', valor: senha);
+    _controller.add(_state);
   }
 }
 
@@ -55,24 +60,22 @@ void main() {
     senha = faker.internet.password();
   });
 
-  test('Test - Deve fazer validacao com email correto', () async {
+  test('Test - Deve fazer validacao com email/senha corretos', () async {
     sut.validarEmail(email);
-
     verify(validation.validate(campo: 'email', valor: email)).called(1);
-  });
 
-  test('Test - Deve fazer validacao com senha correta', () async {
     sut.validarSenha(senha);
-
     verify(validation.validate(campo: 'senha', valor: senha)).called(1);
   });
 
-  test('Test - Deve emitir erro de validação ao validar email incorreto', () {
-    when(validation.validate(campo: anyNamed('campo'), valor: anyNamed('valor')))
-        .thenReturn('email_error');
+  test('Test - Deve emitir erro de validação ao validar email/senha incorreto', () {
+    when(validation.validate(campo: 'email', valor: email)).thenReturn('email_error');
+    when(validation.validate(campo: 'senha', valor: senha)).thenReturn('senha_error');
 
     expectLater(sut.emailErrorStream, emits('email_error'));
+    expectLater(sut.senhaErrorStream, emits('senha_error'));
 
     sut.validarEmail(email);
+    sut.validarSenha(senha);
   });
 }
