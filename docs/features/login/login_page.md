@@ -12,7 +12,7 @@
 9. ✅ Remover mensagem de erro caso o senha seja inválida
 10. ✅ Habilitar botão de login se todos os campos estiverem válidos
 11. ✅ Desabilitar o campo de login caso algum campo esteja inválido
-12. Exibir "loading ..." no inicio da ação de login
+12. ✅ Exibir "loading ..." no inicio da ação de login
 13. ✅ Autenticar usuário com email e senha informados no formalário
-14. Exibir mensagem de erro caso o login falhe
-16. Esconder "loading ..."  no fim da ação de login
+14. ✅ Exibir mensagem de erro caso o login falhe
+16. ✅ Esconder "loading ..."  no fim da ação de login
