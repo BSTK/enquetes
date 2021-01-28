@@ -1,4 +1,5 @@
 import 'package:enquetes/data/usecases/autenticar_usuario_remoto.dart';
+import 'package:enquetes/domain/entidades/entidades.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:enquetes/presentation/presentation.dart';
 import 'package:faker/faker.dart';
@@ -115,5 +116,18 @@ void main() {
     verify(autenticacao.autenticar(params: AutenticacaoParams(email: email, senha: senha)))
       .called(1);
   });
+
+  test('Test - Deve emitir events ao autenticar com dados corretos', () async {
+    when(autenticacao.autenticar(params: anyNamed('params')))
+        .thenAnswer((_) async => ContaAutenticacada(token: faker.guid.guid()));
+
+    sut.validarEmail(email);
+    sut.validarSenha(senha);
+
+    expectLater(sut.loadingStream, emitsInOrder([true, false]));
+
+    await sut.autenticar();
+  });
+
 
 }

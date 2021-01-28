@@ -18,8 +18,12 @@ class StreamLoginPresenter {
   Stream<String> get senhaErrorStream =>
       _controller.stream.map((state) => state.senhaError).distinct();
 
+  Stream<bool> get loadingStream =>
+      _controller.stream.map((state) => state.loadingStream).distinct();
+
   Stream<bool> get formularioValidoStream =>
       _controller.stream.map((state) => state.isformularioValido).distinct();
+
 
   StreamLoginPresenter({
     @required final this.validation,
@@ -39,8 +43,16 @@ class StreamLoginPresenter {
   }
 
   Future<void> autenticar() async {
-    await this.autenticacao.autenticar(
-        params: AutenticacaoParams(email: _state.email, senha: _state.senha));
+    _state.loadingStream = true;
+    _controller.add(_state);
+
+    await this.autenticacao.autenticar(params: AutenticacaoParams(
+      email: _state.email,
+      senha: _state.senha)
+    );
+
+    _state.loadingStream = false;
+    _controller.add(_state);
   }
 
 }

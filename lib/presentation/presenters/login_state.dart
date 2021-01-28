@@ -3,6 +3,7 @@ class LoginState {
   String senha;
   String emailError;
   String senhaError;
+  bool loadingStream = false;
 
   bool get isformularioValido
     => emailError == null
