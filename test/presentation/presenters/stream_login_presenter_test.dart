@@ -130,7 +130,7 @@ void main() {
     await sut.autenticar();
   });
 
-  test('Test - Deve disparar um DomainError de CredenciasInvalidas', () async {
+  test('Test - Deve disparar um DomainError de Credencias Invalidas', () async {
     when(autenticacao.autenticar(params: anyNamed('params')))
       .thenThrow(DomainError.invalidCredentials);
 
@@ -139,6 +139,19 @@ void main() {
 
     expectLater(sut.loadingStream, emitsInOrder([false]));
     sut.mainErrorStream.listen(expectAsync1((error) => expect(error, DomainError.invalidCredentials.description)));
+
+    await sut.autenticar();
+  });
+
+  test('Test - Deve disparar um DomainError de Erro Inesperado', () async {
+    when(autenticacao.autenticar(params: anyNamed('params')))
+        .thenThrow(DomainError.unexpected);
+
+    sut.validarEmail(email);
+    sut.validarSenha(senha);
+
+    expectLater(sut.loadingStream, emitsInOrder([false]));
+    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, DomainError.unexpected.description)));
 
     await sut.autenticar();
   });
