@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:enquetes/domain/helper/helper.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:enquetes/presentation/presentation.dart';
 import 'package:flutter/foundation.dart';
@@ -18,8 +19,11 @@ class StreamLoginPresenter {
   Stream<String> get senhaErrorStream =>
       _controller.stream.map((state) => state.senhaError).distinct();
 
+  Stream<String> get mainErrorStream =>
+      _controller.stream.map((state) => state.mainError).distinct();
+
   Stream<bool> get loadingStream =>
-      _controller.stream.map((state) => state.loadingStream).distinct();
+      _controller.stream.map((state) => state.isLoading).distinct();
 
   Stream<bool> get formularioValidoStream =>
       _controller.stream.map((state) => state.isformularioValido).distinct();
@@ -43,16 +47,20 @@ class StreamLoginPresenter {
   }
 
   Future<void> autenticar() async {
-    _state.loadingStream = true;
-    _controller.add(_state);
+    try {
+      _state.isLoading = true;
+      _controller.add(_state);
 
-    await this.autenticacao.autenticar(params: AutenticacaoParams(
-      email: _state.email,
-      senha: _state.senha)
-    );
-
-    _state.loadingStream = false;
-    _controller.add(_state);
+      await this.autenticacao.autenticar(params: AutenticacaoParams(
+          email: _state.email,
+          senha: _state.senha)
+      );
+    } on DomainError catch (error) {
+      _state.mainError = error.description;
+    } finally {
+      _state.isLoading = false;
+      _controller.add(_state);
+    }
   }
 
 }

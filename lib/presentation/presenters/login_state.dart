@@ -1,9 +1,10 @@
 class LoginState {
   String email;
   String senha;
+  String mainError;
   String emailError;
   String senhaError;
-  bool loadingStream = false;
+  bool isLoading = false;
 
   bool get isformularioValido
     => emailError == null

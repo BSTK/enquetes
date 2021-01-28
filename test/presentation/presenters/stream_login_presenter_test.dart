@@ -1,5 +1,6 @@
 import 'package:enquetes/data/usecases/autenticar_usuario_remoto.dart';
 import 'package:enquetes/domain/entidades/entidades.dart';
+import 'package:enquetes/domain/helper/domain_error.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:enquetes/presentation/presentation.dart';
 import 'package:faker/faker.dart';
@@ -125,6 +126,19 @@ void main() {
     sut.validarSenha(senha);
 
     expectLater(sut.loadingStream, emitsInOrder([true, false]));
+
+    await sut.autenticar();
+  });
+
+  test('Test - Deve disparar um DomainError de CredenciasInvalidas', () async {
+    when(autenticacao.autenticar(params: anyNamed('params')))
+      .thenThrow(DomainError.invalidCredentials);
+
+    sut.validarEmail(email);
+    sut.validarSenha(senha);
+
+    expectLater(sut.loadingStream, emitsInOrder([false]));
+    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, DomainError.invalidCredentials.description)));
 
     await sut.autenticar();
   });
