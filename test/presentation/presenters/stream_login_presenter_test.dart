@@ -1,3 +1,5 @@
+import 'package:enquetes/data/usecases/autenticar_usuario_remoto.dart';
+import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:enquetes/presentation/presentation.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,16 +7,23 @@ import 'package:mockito/mockito.dart';
 
 class ValidationSpy extends Mock implements Validation { }
 
+class AutenticacaoSpy extends Mock implements Autenticacao { }
+
 void main() {
 
   String email;
   String senha;
   ValidationSpy validation;
+  AutenticacaoSpy autenticacao;
   StreamLoginPresenter sut;
 
   setUp(() {
     validation = ValidationSpy();
-    sut = StreamLoginPresenter(validation: validation);
+    autenticacao = AutenticacaoSpy();
+    sut = StreamLoginPresenter(
+        validation: validation,
+        autenticacao: autenticacao
+    );
     email = faker.internet.email();
     senha = faker.internet.password();
   });
@@ -96,6 +105,15 @@ void main() {
     sut.validarEmail(email);
     await Future.delayed(Duration.zero);
     sut.validarSenha(senha);
+  });
+
+  test('Test - Deve chamar o autenticar() com email e senha corretos', () async {
+    sut.validarEmail(email);
+    sut.validarSenha(senha);
+    await sut.autenticar();
+
+    verify(autenticacao.autenticar(params: AutenticacaoParams(email: email, senha: senha)))
+      .called(1);
   });
 
 }

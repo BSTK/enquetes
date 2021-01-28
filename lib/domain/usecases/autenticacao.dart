@@ -1,4 +1,5 @@
 import 'package:enquetes/domain/entidades/conta_autenticacada.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 abstract class Autenticacao {
@@ -9,7 +10,7 @@ abstract class Autenticacao {
 
 }
 
-class AutenticacaoParams {
+class AutenticacaoParams extends Equatable {
   final String email;
   final String senha;
 
@@ -17,4 +18,8 @@ class AutenticacaoParams {
     @required this.email,
     @required this.senha
   });
+
+  @override
+  List get props => [ email, senha ];
+
 }
