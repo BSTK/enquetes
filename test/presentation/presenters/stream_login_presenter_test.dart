@@ -156,5 +156,15 @@ void main() {
     await sut.autenticar();
   });
 
+  test('Test - Deve para de disparar eventos de stream quando o controlador for fechado', () async {
+    expectLater(sut.loadingStream, neverEmits(null));
+    expectLater(sut.mainErrorStream, neverEmits(null));
+    expectLater(sut.emailErrorStream, neverEmits(null));
+    expectLater(sut.senhaErrorStream, neverEmits(null));
+    expectLater(sut.formularioValidoStream, neverEmits(null));
+
+    sut.dispose();
+    sut.validarEmail(email);
+  });
 
 }
