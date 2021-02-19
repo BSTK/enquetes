@@ -14,19 +14,20 @@ void main() {
 
   String email;
   String senha;
+  StreamLoginPresenter sut;
   ValidationSpy validation;
   AutenticacaoSpy autenticacao;
-  StreamLoginPresenter sut;
 
   setUp(() {
+    email = faker.internet.email();
+    senha = faker.internet.password();
+
     validation = ValidationSpy();
     autenticacao = AutenticacaoSpy();
     sut = StreamLoginPresenter(
         validation: validation,
         autenticacao: autenticacao
     );
-    email = faker.internet.email();
-    senha = faker.internet.password();
   });
 
   test('Test - Deve fazer validacao com email/senha corretos', () async {

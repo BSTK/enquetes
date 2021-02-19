@@ -20,6 +20,6 @@ class AutenticacaoParams extends Equatable {
   });
 
   @override
-  List get props => [ email, senha ];
+  List get props => [email, senha];
 
 }

@@ -6,6 +6,7 @@ import 'package:enquetes/presentation/presentation.dart';
 import 'package:flutter/foundation.dart';
 
 class StreamLoginPresenter {
+
   final Validation validation;
   final Autenticacao autenticacao;
 
@@ -52,8 +53,8 @@ class StreamLoginPresenter {
 
       await this.autenticacao.autenticar(params: AutenticacaoParams(
           email: _state.email,
-          senha: _state.senha)
-      );
+          senha: _state.senha
+      ));
     } on DomainError catch (error) {
       _state.mainError = error.description;
     } finally {
