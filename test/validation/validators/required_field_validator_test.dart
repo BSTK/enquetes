@@ -1,24 +1,5 @@
+import 'package:enquetes/validation/validators/validators.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-abstract class FieldValidation {
-  String get field;
-  String validate(final String valor);
-}
-
-class RequiredFieldValidation implements FieldValidation {
-
-  final String field;
-
-  const RequiredFieldValidation({this.field});
-
-  @override
-  String validate(final String valor) {
-    return (valor == null || valor.trim().isEmpty)
-      ? 'Campo Obrigatório!'
-      : null;
-  }
-
-}
 
 void main () {
 
