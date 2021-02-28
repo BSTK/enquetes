@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
 
+import 'factories/factories.dart';
+
 void main() {
   runApp(App());
 }
