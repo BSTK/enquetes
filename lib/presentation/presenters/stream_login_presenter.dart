@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:enquetes/domain/helper/helper.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:enquetes/presentation/presentation.dart';
+import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/foundation.dart';
 
-class StreamLoginPresenter {
+class StreamLoginPresenter implements LoginPresenter {
 
   final Validation validation;
   final Autenticacao autenticacao;
