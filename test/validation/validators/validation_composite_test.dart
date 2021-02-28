@@ -24,15 +24,16 @@ class ValidationComposite implements Validation {
 
 }
 
-class FieldValidationSpy extends Mock implements FieldValidation {}
+class FieldValidationSpy extends Mock implements FieldValidation { }
 
 void main() {
 
   FieldValidation mockValidation({final String campo, final String valor}) {
-    final validationNull = FieldValidationSpy();
-    when(validationNull.validate(any)).thenReturn(valor);
-    when(validationNull.field).thenReturn(campo);
-    return validationNull;
+    final validation = FieldValidationSpy();
+    when(validation.field).thenReturn(campo);
+    when(validation.validate(any)).thenReturn(valor);
+
+    return validation;
   }
 
   test('Test - Deve retornar null se todas as validações retornarem nulo ou vazio', () {
@@ -54,7 +55,7 @@ void main() {
       mockValidation(campo: 'campo_c', valor: null)
     ]);
 
-    final error = sut.validate(campo: 'campo', valor: 'valor');
+    final error = sut.validate(campo: 'campo_a', valor: 'valor');
 
     expect(error, 'campo_invalido');
   });
@@ -66,8 +67,20 @@ void main() {
       mockValidation(campo: 'campo_c', valor: null)
     ]);
 
-    final error = sut.validate(campo: 'campo', valor: 'valor');
+    final error = sut.validate(campo: 'campo_b', valor: 'valor');
 
     expect(error, 'campo_2_invalido');
+  });
+
+  test('Test - Deve retornar erro quando a terceira validação der erro', () {
+    final sut = ValidationComposite(validators: [
+      mockValidation(campo: 'campo_a', valor: ''),
+      mockValidation(campo: 'campo_b', valor: null),
+      mockValidation(campo: 'campo_c', valor: 'campo_3_invalido')
+    ]);
+
+    final error = sut.validate(campo: 'campo_c', valor: 'valor');
+
+    expect(error, 'campo_3_invalido');
   });
 }
