@@ -7,6 +7,6 @@ import 'login.dart';
 LoginPresenter loginPresenter() {
   return StreamLoginPresenter(
     validation: loginValidation(),
-    autenticacao: autenticacao()
+    autenticacao: autenticarUsuarioRemoto()
   );
 }
